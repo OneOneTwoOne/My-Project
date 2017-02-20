@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:id="@+id/activity_grid"
+                android:layout_height="match_parent"
+                android:layout_width="match_parent"
+                android:background="@color/colorAccent"
+              android:gravity="center"
+              android:orientation="horizontal">
+
+
+            <include layout="@layout/gem_row"
+                 android:id="@+id/Point1"/>
+            <include layout="@layout/gem_row"
+                 android:id="@+id/Point2"/>
+            <include layout="@layout/gem_row"
+                 android:id="@+id/Point3"/>
+            <include layout="@layout/gem_row"
+                 android:id="@+id/Point4"/>
+            <include layout="@layout/gem_row"
+                 android:id="@+id/Point5"/>
+            <include layout="@layout/gem_row"
+                 android:id="@+id/Point6"/>
+            <include layout="@layout/gem_row"
+                 android:id="@+id/Point7"/>
+            <include layout="@layout/gem_row"
+                 android:id="@+id/Point8"/>
+
+
+
+
+</LinearLayout>
