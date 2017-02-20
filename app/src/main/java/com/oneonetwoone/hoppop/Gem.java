@@ -2,7 +2,13 @@ package com.oneonetwoone.hoppop;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+
+import java.util.ArrayList;
 import java.util.Random;
+import static com.oneonetwoone.hoppop.GridFragment.mCombo;
+import static com.oneonetwoone.hoppop.GridFragment.firstPoint;
+import static com.oneonetwoone.hoppop.GridFragment.mGrid;
+import static com.oneonetwoone.hoppop.GridFragment.score;
 
 public class Gem {
     private static final String TAG="Gem";
@@ -17,6 +23,7 @@ public class Gem {
     private Button mButton;
     int typesOfGem=5;
     public View v;
+    public boolean animTrue=false;
 
 
     public Gem (int yPos,int xPos, int gridHeight, int gridWidth){
@@ -98,5 +105,61 @@ public class Gem {
             default:
                 break;
         }
+    }
+
+    public void setButton(){
+        v.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                int r=column;
+                int g=row;
+                v.setBackgroundColor(0xFF00FF00);
+                Log.i(TAG, "this point:"+r+" "+g);
+                //reached
+                if(firstPoint){
+                    firstPoint=false;
+                    mCombo.add(Gem.this);}
+                else{firstPoint=true;
+                    mCombo.add(Gem.this);
+                    testChain(mCombo);}
+            }});
+    }
+
+    public void testChain(ArrayList<Gem> combo){
+        int typeNum=combo.get(0).typeNum;
+        if(typeNum!=combo.get(1).typeNum){
+            combo.clear();
+            return;
+        }
+        int x1=combo.get(0).gWidth;
+        int x2=combo.get(1).gWidth;
+        int y1=combo.get(0).gHeight;
+        int y2=combo.get(1).gHeight;
+
+        int xDiff=(x1-x2);
+        int yDiff=(y1-y2);
+        int jump=Math.abs(xDiff)+Math.abs(yDiff);
+
+        int nextX=(x2+xDiff)-1;
+        int nextY=(y2+yDiff)-1;
+
+        if (mGrid[nextY][nextX].typeNum!=typeNum){
+            combo.clear();
+            return;
+        }
+        int n=2;
+        while(mGrid[nextY][nextX].typeNum!=typeNum) {
+            combo.add(mGrid[nextY][nextX]);
+
+            x2 = nextX;
+            y2 = nextY;
+            nextX=(x2+xDiff);
+            nextY=(y2+yDiff);
+            n++;
+            Log.i(TAG,""+n+"x combo!");
+            score+=(n*jump);
+
+        }
+
     }
 }

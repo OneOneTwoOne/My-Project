@@ -13,15 +13,22 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import java.util.ArrayList;
+
+import static android.R.attr.width;
 
 
 public class GridFragment extends Fragment {
     public static final String TAG="GridFragment";
-    public Gem[][] mGrid;
+    public static Gem[][] mGrid;
     public AnimatorSet set= new AnimatorSet();
     private ObjectAnimator firstInRow;
     private ObjectAnimator lastRow;
     public int mDepth, mWidth;
+    public static ArrayList<Gem> mCombo;
+    public static boolean firstPoint=true;
+    public static int score=0;
+
     public static GridFragment newInstance(){
         return new GridFragment();
     }
@@ -57,6 +64,11 @@ public class GridFragment extends Fragment {
 
         }
         set.start();
+        /*while(set.isRunning()){
+
+        }*/
+
+        setButtons(grid);
         return grid;
     }
 
@@ -81,22 +93,22 @@ public class GridFragment extends Fragment {
             firstInRow = drop;
             set.play(drop).after(lastRow);
         }else if(gem.row==0){
-            set.play(drop).with(firstInRow); //doesn't work
+            set.play(drop).with(firstInRow);
         }else{
             set.play(drop).after(lastRow);
         }
-
-
-        gem.v.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View v){
-                v.setBackgroundColor(0xFF00FF00);
-            }
-        });
     }
     public int dpToPx(float dpValue){
         Context context=getActivity();
         return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dpValue, context.getResources().getDisplayMetrics());
+    }
+
+    private void setButtons(Gem[][] grid){
+        for(int j = 0; j < mDepth; j++) {
+            for (int i = 0; i < mWidth; i++) {
+                grid[j][i].setButton();
+            }
+        }
     }
 }
 
