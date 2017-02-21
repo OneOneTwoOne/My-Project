@@ -5,7 +5,30 @@
                 android:layout_width="match_parent"
                 android:background="@color/colorAccent"
               android:gravity="center"
-              android:orientation="horizontal">
+              android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/score_text"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/score"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="horizontal">
+
 
 
             <include layout="@layout/gem_row"
@@ -26,6 +49,6 @@
                  android:id="@+id/Point8"/>
 
 
-
+    </LinearLayout>
 
 </LinearLayout>

@@ -16,6 +16,7 @@ import android.view.ViewGroup;
 import java.util.ArrayList;
 
 import static android.R.attr.width;
+import static android.os.Build.VERSION_CODES.N;
 
 
 public class GridFragment extends Fragment {
@@ -25,7 +26,7 @@ public class GridFragment extends Fragment {
     private ObjectAnimator firstInRow;
     private ObjectAnimator lastRow;
     public int mDepth, mWidth;
-    public static ArrayList<Gem> mCombo;
+    public static ArrayList<Gem> mCombo=new ArrayList<Gem>();
     public static boolean firstPoint=true;
     public static int score=0;
 
@@ -115,54 +116,48 @@ public class GridFragment extends Fragment {
         if(firstPoint){
             firstPoint=false;
             mCombo.add(mGrid[r][c]);
-            Log.i(TAG,"added"+r+" "+c);}
+            Log.i(TAG,"added:"+r+" "+c);}
         else{firstPoint=true;
             mCombo.add(mGrid[r][c]);
-            Log.i(TAG,"added"+r+" "+c);
-            testChain(mCombo);}
+            Log.i(TAG,"added:"+r+" "+c);
+            testChain();}
     }
 
-    public static void testChain(ArrayList<Gem> combo){
-        int typeNum=combo.get(0).typeNum;
-        if(typeNum!=combo.get(1).typeNum){
-            combo.clear();
+    public static void testChain(){
+        int typeNum=mCombo.get(0).typeNum;
+        //Log.i(TAG, ""+mCombo.get(0).column);
+        if(typeNum!=mCombo.get(1).typeNum){
+            mCombo.clear();
             return;
         }
-        int x1=combo.get(0).gWidth;
-        int x2=combo.get(1).gWidth;
-        int y1=combo.get(0).gHeight;
-        int y2=combo.get(1).gHeight;
+        int x1=mCombo.get(0).column;
+        int x2=mCombo.get(1).column;
+        int y1=mCombo.get(0).row;
+        int y2=mCombo.get(1).row;
 
-        int xDiff=(x1-x2);
-        int yDiff=(y1-y2);
+        int xDiff=(x2-x1);
+        int yDiff=(y2-y1);
         int jump=Math.abs(xDiff)+Math.abs(yDiff);
+        Log.i(TAG, ""+xDiff+""+yDiff);
 
-        int nextX=(x2+xDiff)-1;
-        int nextY=(y2+yDiff)-1;
+        int nextX=(x2+xDiff);
+        int nextY=(y2+yDiff);
 
-        if (mGrid[nextY][nextX].typeNum!=typeNum){
-            combo.clear();
-            return;
-        }
         int n=2;
-        while(mGrid[nextY][nextX].typeNum!=typeNum) {
-            combo.add(mGrid[nextY][nextX]);
+        while(mGrid[nextY][nextX].typeNum==typeNum) {
+            mCombo.add(mGrid[nextY][nextX]);
 
             x2 = nextX;
             y2 = nextY;
             nextX=(x2+xDiff);
             nextY=(y2+yDiff);
             n++;
-            Log.i(TAG,""+n+"x combo!");
+            Log.i(TAG,""+n+"x combo!"+(n*jump)+" points!");
             score+=(n*jump);
 
         }
-
+        mCombo.clear();
     }
-
-
-
-
 }
 
 
