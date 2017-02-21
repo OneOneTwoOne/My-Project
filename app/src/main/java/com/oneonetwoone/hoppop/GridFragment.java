@@ -110,6 +110,59 @@ public class GridFragment extends Fragment {
             }
         }
     }
+
+    public static void buttonMethod(int r, int c){
+        if(firstPoint){
+            firstPoint=false;
+            mCombo.add(mGrid[r][c]);
+            Log.i(TAG,"added"+r+" "+c);}
+        else{firstPoint=true;
+            mCombo.add(mGrid[r][c]);
+            Log.i(TAG,"added"+r+" "+c);
+            testChain(mCombo);}
+    }
+
+    public static void testChain(ArrayList<Gem> combo){
+        int typeNum=combo.get(0).typeNum;
+        if(typeNum!=combo.get(1).typeNum){
+            combo.clear();
+            return;
+        }
+        int x1=combo.get(0).gWidth;
+        int x2=combo.get(1).gWidth;
+        int y1=combo.get(0).gHeight;
+        int y2=combo.get(1).gHeight;
+
+        int xDiff=(x1-x2);
+        int yDiff=(y1-y2);
+        int jump=Math.abs(xDiff)+Math.abs(yDiff);
+
+        int nextX=(x2+xDiff)-1;
+        int nextY=(y2+yDiff)-1;
+
+        if (mGrid[nextY][nextX].typeNum!=typeNum){
+            combo.clear();
+            return;
+        }
+        int n=2;
+        while(mGrid[nextY][nextX].typeNum!=typeNum) {
+            combo.add(mGrid[nextY][nextX]);
+
+            x2 = nextX;
+            y2 = nextY;
+            nextX=(x2+xDiff);
+            nextY=(y2+yDiff);
+            n++;
+            Log.i(TAG,""+n+"x combo!");
+            score+=(n*jump);
+
+        }
+
+    }
+
+
+
+
 }
 
 
