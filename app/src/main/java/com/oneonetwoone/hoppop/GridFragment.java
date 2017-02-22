@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import java.util.ArrayList;
 
+import static android.R.attr.width;
 
 
 public class GridFragment extends Fragment {
@@ -52,7 +53,7 @@ public class GridFragment extends Fragment {
 
     }
 
-    private Gem[][] createGrid(int width, int height){
+    private Gem[][] createGrid( int height, int width){
         Gem[][] grid= new Gem[height][width];
 
         for(int j = 0; j < height; j++) {
@@ -130,35 +131,33 @@ public class GridFragment extends Fragment {
         int x2=mCombo.get(1).column;
         int y1=mCombo.get(0).row;
         int y2=mCombo.get(1).row;
-
         int xDiff=(x2-x1);
         int yDiff=(y2-y1);
         int jump=Math.abs(xDiff)+Math.abs(yDiff);
-        Log.i(TAG, ""+xDiff+""+yDiff);
-
         int nextX=(x2+xDiff);
         int nextY=(y2+yDiff);
-        if(nextX>mGrid[0][0].gWidth){nextX=nextX-(mGrid[0][0].gWidth+1);}
-        if(nextX<0){nextX=nextX+(mGrid[0][0].gWidth+1);}
-        if(nextY>mGrid[0][0].gHeight){nextY=nextY-(mGrid[0][0].gHeight+1);}
-        if(nextY<0){nextY=nextY+(mGrid[0][0].gHeight+1);}
+        if(nextX>mGrid[0][0].gWidth){nextX=nextX-(mGrid[0][0].gWidth);}
+        if(nextX<0){nextX=nextX+(mGrid[0][0].gWidth);}
+        if(nextY>mGrid[0][0].gHeight){nextY=nextY-(mGrid[0][0].gHeight);}
+        if(nextY<0){nextY=nextY+(mGrid[0][0].gHeight);}
         int n=2;
         while(mGrid[nextY][nextX].typeNum==typeNum) {
+            Log.i(TAG, "added:nextX "+nextX+" NextY "+nextY);
             mCombo.add(mGrid[nextY][nextX]);
             x2 = nextX;
             y2 = nextY;
             nextX=(x2+xDiff);
             nextY=(y2+yDiff);
-            if(nextX>mGrid[0][0].gWidth){nextX=nextX-(mGrid[0][0].gWidth+1);}
-            if(nextY>mGrid[0][0].gWidth){nextY=nextY-(mGrid[0][0].gHeight+1);}
-            if(nextX<0){nextX=nextX+(mGrid[0][0].gWidth+1);}
-            if(nextY<0){nextY=nextY+(mGrid[0][0].gHeight+1);}
+            if(nextX>mGrid[0][0].gWidth){nextX=nextX-(mGrid[0][0].gWidth);}
+            if(nextY>mGrid[0][0].gWidth){nextY=nextY-(mGrid[0][0].gHeight);}
+            if(nextX<0){nextX=nextX+(mGrid[0][0].gWidth);}
+            if(nextY<0){nextY=nextY+(mGrid[0][0].gHeight);}
             n++;
-            Log.i(TAG, "added:"+nextX+" "+nextY);
+            Log.i(TAG, "added:nextX "+nextX+" NextY "+nextY);
             Log.i(TAG,""+n+"x combo!"+(n*jump)+" points!");
             score+=(n*jump);
 
-            if(x1==x2&&y1==y2){
+            if(x1==nextX&&y1==nextY){
                 Log.i(TAG, "LOOPED");
                 score=score*score;
                 mCombo.clear();
@@ -167,6 +166,12 @@ public class GridFragment extends Fragment {
 
         }
         mCombo.clear();
+    }
+
+    public void setBlank(ArrayList<Gem> combo){
+        for (int i=0; i<combo.size(); i++){
+            combo.get(i).v.setBackground();
+        }
     }
 }
 
