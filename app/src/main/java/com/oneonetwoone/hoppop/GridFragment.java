@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import java.util.ArrayList;
 
 import static android.R.attr.width;
+import static android.R.attr.x;
 
 
 public class GridFragment extends Fragment {
@@ -58,7 +59,7 @@ public class GridFragment extends Fragment {
 
         for(int j = 0; j < height; j++) {
             for (int i = 0; i < width; i++) {
-                grid[j][i]=new Gem(j, i,height,width);
+                grid[j][i]=new Gem(j, i,height-1,width-1);
                 dropGem(grid[j][i]);
                 Log.i(TAG,"gem");
             }
@@ -113,10 +114,10 @@ public class GridFragment extends Fragment {
         if(firstPoint){
             firstPoint=false;
             mCombo.add(mGrid[r][c]);
-            Log.i(TAG,"added:"+r+" "+c);}
+            Log.i(TAG,"selected:"+r+" "+c);}
         else{firstPoint=true;
             mCombo.add(mGrid[r][c]);
-            Log.i(TAG,"added:"+r+" "+c);
+            Log.i(TAG,"selected:"+r+" "+c);
             runChain();}
     }
 
@@ -124,6 +125,7 @@ public class GridFragment extends Fragment {
         int typeNum=mCombo.get(0).typeNum;
         //Log.i(TAG, ""+mCombo.get(0).column);
         if(typeNum!=mCombo.get(1).typeNum){
+            Log.i(TAG, "not right");
             mCombo.clear();
             return;
         }
@@ -131,46 +133,55 @@ public class GridFragment extends Fragment {
         int x2=mCombo.get(1).column;
         int y1=mCombo.get(0).row;
         int y2=mCombo.get(1).row;
+        Log.i(TAG, "added:X "+x1+" Y "+y1);
+        Log.i(TAG, "added:X "+x2+" Y "+y2);
         int xDiff=(x2-x1);
         int yDiff=(y2-y1);
         int jump=Math.abs(xDiff)+Math.abs(yDiff);
-        int nextX=(x2+xDiff);
-        int nextY=(y2+yDiff);
-        if(nextX>mGrid[0][0].gWidth){nextX=nextX-(mGrid[0][0].gWidth);}
-        if(nextX<0){nextX=nextX+(mGrid[0][0].gWidth);}
-        if(nextY>mGrid[0][0].gHeight){nextY=nextY-(mGrid[0][0].gHeight);}
-        if(nextY<0){nextY=nextY+(mGrid[0][0].gHeight);}
+        int nextX=crop(x2+xDiff,mGrid[0][0].gWidth);
+        int nextY=crop(y2+yDiff,mGrid[0][0].gHeight);
         int n=2;
+        Log.i(TAG, "trying next"+nextX+nextY);
+
         while(mGrid[nextY][nextX].typeNum==typeNum) {
-            Log.i(TAG, "added:nextX "+nextX+" NextY "+nextY);
             mCombo.add(mGrid[nextY][nextX]);
-            x2 = nextX;
-            y2 = nextY;
-            nextX=(x2+xDiff);
-            nextY=(y2+yDiff);
-            if(nextX>mGrid[0][0].gWidth){nextX=nextX-(mGrid[0][0].gWidth);}
-            if(nextY>mGrid[0][0].gWidth){nextY=nextY-(mGrid[0][0].gHeight);}
-            if(nextX<0){nextX=nextX+(mGrid[0][0].gWidth);}
-            if(nextY<0){nextY=nextY+(mGrid[0][0].gHeight);}
-            n++;
-            Log.i(TAG, "added:nextX "+nextX+" NextY "+nextY);
+            Log.i(TAG, "added:X "+nextX+" Y "+nextY);
             Log.i(TAG,""+n+"x combo!"+(n*jump)+" points!");
+            n++;
             score+=(n*jump);
 
-            if(x1==nextX&&y1==nextY){
+            x2 = nextX;
+            y2 = nextY;
+            nextX=crop(x2+xDiff,mGrid[0][0].gWidth);
+            nextY=crop(y2+yDiff,mGrid[0][0].gHeight);
+
+            if((x1==nextX)&&(y1==nextY)){
                 Log.i(TAG, "LOOPED");
                 score=score*score;
+                setBlank(mCombo);
                 mCombo.clear();
                 return;
             }
+            Log.i(TAG, "trying next"+nextX+nextY);
 
         }
+        if(n==2){
+            mCombo.clear();
+            return;}
+        setBlank(mCombo);
         mCombo.clear();
     }
 
-    public void setBlank(ArrayList<Gem> combo){
+    public static int crop(int n,int range){
+        if(n>range){n=n-(range+1);}
+        if(n<0){n=n+(range+1);}
+        return n;
+    }
+
+    public static void setBlank(ArrayList<Gem> combo){
         for (int i=0; i<combo.size(); i++){
-            combo.get(i).v.setBackground();
+            combo.get(i).v.setVisibility(View.GONE);
+            combo.get(i).typeNum=0;
         }
     }
 }
