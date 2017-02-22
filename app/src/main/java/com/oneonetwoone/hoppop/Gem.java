@@ -1,15 +1,9 @@
 package com.oneonetwoone.hoppop;
-import android.content.Context;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-
-import java.util.ArrayList;
 import java.util.Random;
-import static com.oneonetwoone.hoppop.GridFragment.mCombo;
-import static com.oneonetwoone.hoppop.GridFragment.firstPoint;
-import static com.oneonetwoone.hoppop.GridFragment.mGrid;
-import static com.oneonetwoone.hoppop.GridFragment.score;
+
 
 public class Gem {
     private static final String TAG="Gem";
