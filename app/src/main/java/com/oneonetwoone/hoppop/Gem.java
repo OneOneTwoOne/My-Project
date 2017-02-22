@@ -4,6 +4,7 @@ import android.view.View;
 import android.widget.Button;
 import java.util.Random;
 
+
 public class Gem {
     private static final String TAG="Gem";
 
@@ -17,6 +18,7 @@ public class Gem {
     private Button mButton;
     int typesOfGem=5;
     public View v;
+    public boolean animTrue=false;
 
 
     public Gem (int yPos,int xPos, int gridHeight, int gridWidth){
@@ -98,5 +100,15 @@ public class Gem {
             default:
                 break;
         }
+    }
+
+    public void setButton(){
+        v.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                v.setBackgroundColor(0xFF00FF00);
+                Log.i(TAG, ""+column+" "+row);
+                GridFragment.buttonMethod(row, column);
+            }});
     }
 }
