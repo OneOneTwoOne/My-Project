@@ -6,5 +6,5 @@
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:src="@drawable/gem_blank"
-            android:layout_gravity="center_horizontal"/>
+            android:layout_gravity="center"/>
 </FrameLayout>

@@ -1,10 +1,8 @@
 package com.oneonetwoone.hoppop;
 
-
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.content.Context;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -12,11 +10,8 @@ import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
 import java.util.ArrayList;
 
-import static android.R.attr.width;
-import static android.os.Build.VERSION_CODES.N;
 
 
 public class GridFragment extends Fragment {
@@ -26,7 +21,7 @@ public class GridFragment extends Fragment {
     private ObjectAnimator firstInRow;
     private ObjectAnimator lastRow;
     public int mDepth, mWidth;
-    public static ArrayList<Gem> mCombo=new ArrayList<Gem>();
+    public static ArrayList<Gem> mCombo=new ArrayList<>();
     public static boolean firstPoint=true;
     public static int score=0;
 
@@ -43,11 +38,14 @@ public class GridFragment extends Fragment {
         int uiOptions = View.SYSTEM_UI_FLAG_FULLSCREEN;
         decorView.setSystemUiVisibility(uiOptions);
 
+
+
         return view;
     }
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState){
+        //mScoreView.//problem
         mDepth=8;
         mWidth=8;
         mGrid=createGrid(mWidth, mDepth);
@@ -61,13 +59,11 @@ public class GridFragment extends Fragment {
             for (int i = 0; i < width; i++) {
                 grid[j][i]=new Gem(j, i,height,width);
                 dropGem(grid[j][i]);
+                Log.i(TAG,"gem");
             }
 
         }
         set.start();
-        /*while(set.isRunning()){
-
-        }*/
 
         setButtons(grid);
         return grid;
@@ -120,10 +116,10 @@ public class GridFragment extends Fragment {
         else{firstPoint=true;
             mCombo.add(mGrid[r][c]);
             Log.i(TAG,"added:"+r+" "+c);
-            testChain();}
+            runChain();}
     }
 
-    public static void testChain(){
+    public static void runChain(){
         int typeNum=mCombo.get(0).typeNum;
         //Log.i(TAG, ""+mCombo.get(0).column);
         if(typeNum!=mCombo.get(1).typeNum){
@@ -142,18 +138,32 @@ public class GridFragment extends Fragment {
 
         int nextX=(x2+xDiff);
         int nextY=(y2+yDiff);
-
+        if(nextX>mGrid[0][0].gWidth){nextX=nextX-(mGrid[0][0].gWidth+1);}
+        if(nextX<0){nextX=nextX+(mGrid[0][0].gWidth+1);}
+        if(nextY>mGrid[0][0].gHeight){nextY=nextY-(mGrid[0][0].gHeight+1);}
+        if(nextY<0){nextY=nextY+(mGrid[0][0].gHeight+1);}
         int n=2;
         while(mGrid[nextY][nextX].typeNum==typeNum) {
             mCombo.add(mGrid[nextY][nextX]);
-
             x2 = nextX;
             y2 = nextY;
             nextX=(x2+xDiff);
             nextY=(y2+yDiff);
+            if(nextX>mGrid[0][0].gWidth){nextX=nextX-(mGrid[0][0].gWidth+1);}
+            if(nextY>mGrid[0][0].gWidth){nextY=nextY-(mGrid[0][0].gHeight+1);}
+            if(nextX<0){nextX=nextX+(mGrid[0][0].gWidth+1);}
+            if(nextY<0){nextY=nextY+(mGrid[0][0].gHeight+1);}
             n++;
+            Log.i(TAG, "added:"+nextX+" "+nextY);
             Log.i(TAG,""+n+"x combo!"+(n*jump)+" points!");
             score+=(n*jump);
+
+            if(x1==x2&&y1==y2){
+                Log.i(TAG, "LOOPED");
+                score=score*score;
+                mCombo.clear();
+                return;
+            }
 
         }
         mCombo.clear();
