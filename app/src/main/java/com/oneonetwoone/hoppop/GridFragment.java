@@ -10,10 +10,13 @@ import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
+
 import java.util.ArrayList;
 
 import static android.R.attr.width;
 import static android.R.attr.x;
+import static android.icu.lang.UCharacter.GraphemeClusterBreak.V;
 
 
 public class GridFragment extends Fragment {
@@ -26,7 +29,7 @@ public class GridFragment extends Fragment {
     public static ArrayList<Gem> mCombo=new ArrayList<>();
     public static boolean firstPoint=true;
     public static int score=0;
-
+    public static LayoutInflater vi;
     public static GridFragment newInstance(){
         return new GridFragment();
     }
@@ -73,10 +76,10 @@ public class GridFragment extends Fragment {
 
     public void dropGem(Gem gem){
 
-        LayoutInflater vi = (LayoutInflater) getActivity().getApplicationContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        gem.v= vi.inflate(gem.type, null);
+        vi = (LayoutInflater) getActivity().getApplicationContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        gem.v=(FrameLayout) vi.inflate(gem.type, null);
         ViewGroup insertPoint=(ViewGroup) getActivity().findViewById(gem.point);
-        insertPoint.addView(gem.v,0,new ViewGroup.LayoutParams(ViewGroup.LayoutParams.FILL_PARENT, ViewGroup.LayoutParams.FILL_PARENT));
+        insertPoint.addView(gem.v,0,new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
 
         float spawn=insertPoint.getTop();
 
@@ -180,7 +183,16 @@ public class GridFragment extends Fragment {
 
     public static void setBlank(ArrayList<Gem> combo){
         for (int i=0; i<combo.size(); i++){
-            combo.get(i).v.setVisibility(View.GONE);
+            Log.i(TAG,"here1");
+            View view=vi.inflate(R.layout.gem_blank, null);//here
+            Log.i(TAG,"here1");
+            ViewGroup insertPoint= combo.get(i).v;
+            Log.i(TAG,"here1");
+            insertPoint.addView(view,0,new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+
+            Log.i(TAG,"here1");
+            combo.get(i).v.removeAllViews();
+            Log.i(TAG,"pass");
             combo.get(i).typeNum=0;
         }
     }

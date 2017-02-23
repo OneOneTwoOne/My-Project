@@ -1,7 +1,10 @@
 package com.oneonetwoone.hoppop;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.FrameLayout;
+
 import java.util.Random;
 
 
@@ -17,7 +20,7 @@ public class Gem {
     public int gWidth, gHeight;
     private Button mButton;
     int typesOfGem=5;
-    public View v;
+    public ViewGroup v;
     public boolean animTrue=false;
 
 
